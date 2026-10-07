@@ -2,8 +2,10 @@ $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $buildDirectory = Join-Path $projectRoot "build"
-$testSource = Join-Path $projectRoot "tests\project_smoke.cpp"
-$testProgram = Join-Path $buildDirectory "project_smoke.exe"
+$testSource = Join-Path $projectRoot "tests\deterministic_selection_tests.cpp"
+$implementationSource = Join-Path $projectRoot "src\deterministic_selection.cpp"
+$includeDirectory = Join-Path $projectRoot "include"
+$testProgram = Join-Path $buildDirectory "deterministic_selection_tests.exe"
 
 $compilerCommand = Get-Command "g++" -ErrorAction SilentlyContinue
 if ($compilerCommand) {
@@ -28,7 +30,9 @@ $env:PATH = "$compilerDirectory;$env:PATH"
     -Wextra `
     -Wpedantic `
     -Werror `
+    -I $includeDirectory `
     $testSource `
+    $implementationSource `
     -o $testProgram
 
 if ($LASTEXITCODE -ne 0) {
