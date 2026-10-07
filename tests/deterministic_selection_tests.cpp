@@ -1,7 +1,10 @@
 #include "selection/deterministic_selection.hpp"
 
+#include <algorithm>
 #include <cstddef>
 #include <iostream>
+#include <numeric>
+#include <random>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -39,6 +42,16 @@ void expectOutOfRange(const std::string_view name, std::vector<int> values,
     }
 }
 
+void expectEveryRankMatchesSort(const std::string_view name,
+                                const std::vector<int>& values) {
+    std::vector<int> sorted = values;
+    std::sort(sorted.begin(), sorted.end());
+
+    for (std::size_t k = 0; k < values.size(); ++k) {
+        expectEqual(name, values, k, sorted[k]);
+    }
+}
+
 }  // namespace
 
 int main() {
@@ -68,6 +81,26 @@ int main() {
     for (std::size_t k = 0; k < severalGroups.size(); ++k) {
         expectEqual("groups of five with remainder", severalGroups, k,
                     static_cast<int>(k));
+    }
+
+    std::mt19937 generator(14487692U);
+    std::uniform_int_distribution<int> repeatedValues(-20, 20);
+    for (std::size_t size = 1; size <= 80; ++size) {
+        for (int trial = 0; trial < 4; ++trial) {
+            std::vector<int> generated(size);
+            for (int& value : generated) {
+                value = repeatedValues(generator);
+            }
+            expectEveryRankMatchesSort("fixed-seed generated array", generated);
+        }
+    }
+
+    std::vector<int> largeShuffle(1000);
+    std::iota(largeShuffle.begin(), largeShuffle.end(), -500);
+    std::shuffle(largeShuffle.begin(), largeShuffle.end(), generator);
+    for (const std::size_t k : {0U, 1U, 249U, 499U, 500U, 749U, 998U, 999U}) {
+        expectEqual("large shuffled array", largeShuffle, k,
+                    static_cast<int>(k) - 500);
     }
 
     expectOutOfRange("empty input", {}, 0);
