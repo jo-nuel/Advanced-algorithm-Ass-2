@@ -12,7 +12,7 @@ and how each algorithm responds to different input arrangements.
 ## Primary authors
 
 - Median of Medians: Jonathan Immanuel
-- Randomized Quickselect: To be added
+- Randomized Quickselect: Colin Ice King-eo
 
 Both members will contribute to testing, benchmarking, analysing the results,
 writing the report, and producing the video.
@@ -30,7 +30,7 @@ scripts/    Build and verification scripts
 
 - `main` contains reviewed shared work.
 - `jonathan/median-of-medians` contains Jonathan's implementation work.
-- The Randomized Quickselect author will work on a separate branch.
+- `colin/randomized-quickselect` contains Colin's implementation work.
 
 ## Build and verify
 
