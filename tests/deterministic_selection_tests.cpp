@@ -61,6 +61,15 @@ int main() {
         expectEqual("every descending k", descending, k, static_cast<int>(k + 1));
     }
 
+    const std::vector<int> severalGroups{
+        20, 3,  14, 7,  0, 18, 5, 11, 1,  16, 9,
+        2,  19, 6,  13, 4, 17, 8,  15, 10, 12,
+    };
+    for (std::size_t k = 0; k < severalGroups.size(); ++k) {
+        expectEqual("groups of five with remainder", severalGroups, k,
+                    static_cast<int>(k));
+    }
+
     expectOutOfRange("empty input", {}, 0);
     expectOutOfRange("k past the end", {1, 2, 3}, 3);
 
