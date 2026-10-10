@@ -52,6 +52,7 @@ int choosePivot(std::vector<int>& values, const std::size_t begin,
         std::sort(values.begin() + static_cast<std::ptrdiff_t>(groupBegin),
                   values.begin() + static_cast<std::ptrdiff_t>(groupEnd));
 
+        // Store group medians together so the recursive call uses one prefix.
         const std::size_t groupMedian = groupBegin + (groupEnd - groupBegin) / 2;
         std::swap(values[begin + medianCount], values[groupMedian]);
         ++medianCount;
