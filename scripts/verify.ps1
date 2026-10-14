@@ -1,5 +1,22 @@
 $ErrorActionPreference = "Stop"
 
+# Run Quickselect first; combined repositories then continue into the verifier below.
+$quickselectVerifier = Join-Path $PSScriptRoot "verify_randomised_quickselect.ps1"
+& $quickselectVerifier
+
+$quickselectRoot = Split-Path -Parent $PSScriptRoot
+$quickselectHasDeterministicSource = Test-Path -LiteralPath (Join-Path $quickselectRoot "src\deterministic_selection.cpp")
+$quickselectHasDeterministicTests = Test-Path -LiteralPath (Join-Path $quickselectRoot "tests\deterministic_selection_tests.cpp")
+
+if (-not $quickselectHasDeterministicSource -and -not $quickselectHasDeterministicTests) {
+    return
+}
+if (-not $quickselectHasDeterministicSource -or -not $quickselectHasDeterministicTests) {
+    throw "Deterministic verification requires both its implementation and test source."
+}
+
+$ErrorActionPreference = "Stop"
+
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $buildDirectory = Join-Path $projectRoot "build"
 $testSource = Join-Path $projectRoot "tests\project_smoke.cpp"
