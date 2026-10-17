@@ -1,0 +1,20 @@
+Benchmark environment
+=====================
+
+Run date: 2026-10-18
+Operating system: Microsoft Windows 11 Home Single Language, version 10.0.26200
+Processor: 13th Gen Intel(R) Core(TM) i7-13700H
+Processor cores: 14 physical, 20 logical
+Installed memory: 15.8 GiB
+Compiler: g++.exe (Rev5, Built by MSYS2 project) 16.1.0
+Language standard: C++23
+Build flags: -O2 -DNDEBUG -Wall -Wextra -Wpedantic -Werror
+
+Each benchmark case used one untimed warm-up for each algorithm, followed by
+seven timed repetitions numbered 0 to 6. The algorithm run order alternated
+between repetitions. Input generation, vector copying, random generator setup,
+and result checking were kept outside the timed section.
+
+The full run covered six input families, eleven input sizes, and five target
+ranks. This produced 330 cases and 4,620 timing rows. Both algorithms used the
+same input values for each case.
