@@ -66,3 +66,6 @@ Write-Host "Deterministic selection verification passed."
 $benchmarkInputVerifier = Join-Path $PSScriptRoot "verify_benchmark_inputs.ps1"
 & $benchmarkInputVerifier
 
+$benchmarkRunnerVerifier = Join-Path $PSScriptRoot "verify_benchmark_runner.ps1"
+& $benchmarkRunnerVerifier
+
