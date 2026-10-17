@@ -69,3 +69,6 @@ $benchmarkInputVerifier = Join-Path $PSScriptRoot "verify_benchmark_inputs.ps1"
 $benchmarkRunnerVerifier = Join-Path $PSScriptRoot "verify_benchmark_runner.ps1"
 & $benchmarkRunnerVerifier
 
+$benchmarkCaseVerifier = Join-Path $PSScriptRoot "verify_benchmark_cases.ps1"
+& $benchmarkCaseVerifier
+

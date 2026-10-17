@@ -121,3 +121,26 @@ reverse-sorted inputs, groups with an incomplete final group, and arrays with
 many duplicates. Fixed-seed generated arrays are checked against `std::sort`,
 which provides a simple reference answer for every requested rank.
 
+## Shared benchmark
+
+The benchmark compares both algorithms on the same generated arrays. It uses
+six input families, five requested ranks, one untimed warm-up, and seven timed
+repetitions. Algorithm order alternates between repetitions. Input generation,
+array copying, random generator setup, and result checking are outside the
+timed section.
+
+Run the short end-to-end benchmark with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/run_benchmarks.ps1 -Mode smoke
+```
+
+Run the full size sequence with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/run_benchmarks.ps1 -Mode full
+```
+
+By default, raw results are written to `results/smoke_benchmark.csv` or
+`results/full_benchmark.csv`. Use `-OutputPath` to choose another CSV path.
+
