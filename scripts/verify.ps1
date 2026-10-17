@@ -61,5 +61,8 @@ if ($LASTEXITCODE -ne 0) {
     throw "Verification failed with exit code $LASTEXITCODE."
 }
 
-Write-Host "Verification passed."
+Write-Host "Deterministic selection verification passed."
+
+$benchmarkInputVerifier = Join-Path $PSScriptRoot "verify_benchmark_inputs.ps1"
+& $benchmarkInputVerifier
 
