@@ -18,6 +18,8 @@ EqualRange partitionAroundPivot(std::vector<int>& values, const std::size_t begi
     std::size_t current = begin;
     std::size_t greaterBegin = end;
 
+    // Values before smallerEnd are smaller, values up to current are equal,
+    // and values from greaterBegin onward are greater than the pivot.
     while (current < greaterBegin) {
         if (values[current] < pivot) {
             std::swap(values[smallerEnd], values[current]);
