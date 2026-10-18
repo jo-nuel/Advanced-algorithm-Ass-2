@@ -24,6 +24,47 @@ if ($caseRows.Count -ne 660) { throw "Expected 660 case summary rows, found $($c
 if ($sizeRows.Count -ne 132) { throw "Expected 132 size summary rows, found $($sizeRows.Count)." }
 if ($speedupRows.Count -ne 330) { throw "Expected 330 speedup rows, found $($speedupRows.Count)." }
 
+# Recalculate every seven-run median directly from the raw file. This catches a
+# summary script that writes the right number of rows but calculates them badly.
+$summaryByCase = @{}
+foreach ($summaryRow in $caseRows) {
+    $key = "$($summaryRow.Family)|$($summaryRow.N)|$($summaryRow.K)|$($summaryRow.Algorithm)"
+    if ($summaryByCase.ContainsKey($key)) {
+        throw "Duplicate case summary row: $key"
+    }
+    $summaryByCase[$key] = $summaryRow
+}
+
+$rawRows = @(Import-Csv -LiteralPath $inputPath)
+foreach ($rawGroup in @($rawRows | Group-Object family, n, k, algorithm)) {
+    $groupRows = @($rawGroup.Group)
+    $key = "$($groupRows[0].family)|$($groupRows[0].n)|$($groupRows[0].k)|$($groupRows[0].algorithm)"
+    if (-not $summaryByCase.ContainsKey($key)) {
+        throw "Missing case summary row: $key"
+    }
+
+    $orderedTimes = @($groupRows.time_ns | ForEach-Object { [long]$_ } | Sort-Object)
+    if ($orderedTimes.Count -ne 7) {
+        throw "Expected seven raw timings for: $key"
+    }
+    if ([long]$summaryByCase[$key].MedianNs -ne $orderedTimes[3]) {
+        throw "Incorrect median in case summary: $key"
+    }
+}
+
+foreach ($speedupRow in $speedupRows) {
+    $deterministicKey = "$($speedupRow.Family)|$($speedupRow.N)|$($speedupRow.K)|median-of-medians"
+    $randomisedKey = "$($speedupRow.Family)|$($speedupRow.N)|$($speedupRow.K)|randomised-quickselect"
+    $expectedSpeedup = [math]::Round(
+        [double]$summaryByCase[$deterministicKey].MedianNs /
+            [double]$summaryByCase[$randomisedKey].MedianNs,
+        3
+    )
+    if ([double]$speedupRow.QuickselectSpeedup -ne $expectedSpeedup) {
+        throw "Incorrect speedup for $($speedupRow.Family), n=$($speedupRow.N), k=$($speedupRow.K)."
+    }
+}
+
 foreach ($fileName in @(
     "median_time_by_size.svg",
     "speedup_at_largest_size.svg",
@@ -35,6 +76,10 @@ foreach ($fileName in @(
     }
     if ((Get-Item -LiteralPath $path).Length -eq 0) {
         throw "Generated plot is empty: $fileName"
+    }
+    [xml]$svg = Get-Content -LiteralPath $path -Raw
+    if ($svg.DocumentElement.LocalName -ne "svg") {
+        throw "Generated plot is not a valid SVG document: $fileName"
     }
 }
 
