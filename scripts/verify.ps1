@@ -72,3 +72,6 @@ $benchmarkRunnerVerifier = Join-Path $PSScriptRoot "verify_benchmark_runner.ps1"
 $benchmarkCaseVerifier = Join-Path $PSScriptRoot "verify_benchmark_cases.ps1"
 & $benchmarkCaseVerifier
 
+$benchmarkAnalysisVerifier = Join-Path $PSScriptRoot "verify_benchmark_analysis.ps1"
+& $benchmarkAnalysisVerifier
+

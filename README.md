@@ -144,3 +144,21 @@ powershell -ExecutionPolicy Bypass -File scripts/run_benchmarks.ps1 -Mode full
 By default, raw results are written to `results/smoke_benchmark.csv` or
 `results/full_benchmark.csv`. Use `-OutputPath` to choose another CSV path.
 
+## Results and analysis
+
+The completed experiment contains 330 benchmark cases and 4,620 timed runs.
+The `results` directory includes the raw measurements, case medians, summaries
+by input size, speedup comparisons, and three SVG plots. Randomized Quickselect
+had the lower median time in every tested case. At one million elements, its
+median speedup across the five ranks ranged from 2.31 times on random arrays
+with duplicates to 6.92 times on reverse-sorted arrays.
+
+`scripts/summarise_benchmarks.ps1` contains the calculations used to produce
+the submitted tables and plots. It also checks that each case has seven runs
+for both algorithms and that both algorithms returned the same selected value.
+The script uses only PowerShell and does not require a plotting package.
+
+These measurements were collected on one computer, so they describe the
+tested inputs and environment rather than proving that one algorithm is always
+faster on every system.
+
