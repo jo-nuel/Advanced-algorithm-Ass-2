@@ -6,31 +6,27 @@ unsorted array:
 - Deterministic selection using Median of Medians
 - Randomized Quickselect
 
-The comparison will focus on running time, consistency between repeated runs,
-and how each algorithm responds to different input arrangements.
+The comparison measures running time, consistency between repeated runs, and
+how each algorithm responds to different input arrangements.
 
 ## Primary authors
 
 - Median of Medians: Jonathan Immanuel
 - Randomized Quickselect: Colin Ice King-eo
 
-Both members will contribute to testing, benchmarking, analysing the results,
+Both members contributed to testing, benchmarking, analysing the results,
 writing the report, and producing the video.
 
-## Planned project structure
+## Repository structure
 
 ```text
 include/    Function declarations
 src/        Algorithm implementations
 tests/      Correctness tests
+benchmarks/ Benchmark command-line program
 scripts/    Build and verification scripts
+results/    Raw measurements, summaries, and plots
 ```
-
-## Development branches
-
-- `main` contains reviewed shared work.
-- `jonathan/median-of-medians` contains Jonathan's implementation work.
-- `colin/randomised-quickselect` contains Colin's implementation work.
 
 ## Build and verify
 
@@ -44,8 +40,8 @@ The script uses `g++` from `PATH` when available. On the project development
 computer, it can also use the MSYS2 UCRT64 compiler at
 `C:\msys64\ucrt64\bin\g++.exe`.
 
-The shared verifier runs both independent correctness suites: Randomized
-Quickselect first, followed by Median of Medians.
+The shared verifier runs both independent correctness suites, the benchmark
+generator and runner tests, the benchmark case tests, and the analysis checks.
 
 ## Randomised Quickselect
 
@@ -73,8 +69,8 @@ powershell -ExecutionPolicy Bypass -File scripts/verify_randomised_quickselect.p
 
 The scripts compile with `-std=c++23 -Wall -Wextra -Wpedantic -Werror` and use
 `include` as the header search directory. Quickselect's executable is
-`build/randomised_quickselect_tests.exe`. These commands check correctness;
-benchmarking and the comprehensive algorithm comparison remain deferred.
+`build/randomised_quickselect_tests.exe`. This standalone command checks the
+Randomized Quickselect implementation without running the other project tests.
 
 ## Deterministic selection interface
 
